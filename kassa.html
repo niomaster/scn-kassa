@@ -1,0 +1,163 @@
+<head>
+    <title>kassa</title>
+    <script type="text/javascript">
+        $('loginScreen').modal();
+    </script>
+</head>
+
+<body>
+    {{> kassa}}
+</body>
+
+<template name="kassa">
+    {{> loginScreen}}
+
+    {{> navigation}}
+    <div class="container">
+        {{#if checkout}}
+            {{> products}}
+        {{/if}}{{#if addProduct}}
+            {{> addProductForm}}
+        {{/if}}{{#if addUser}}
+            {{> addUserForm}}
+        {{/if}}
+    </div>
+</template>
+
+<template name="navigation">
+    <div class="navbar"><div class="navbar-inner">
+        <div class="brand">Kassa</div>
+        <ul class="nav">
+            <li {{#if checkout}}class="active"{{/if}} id="checkout">
+                <a href="javascript:void(0)" class="tab">Betalen</a></li>
+            <li {{#if addProduct}}class="active"{{/if}} id="addProduct">
+                <a href="javascript:void(0)" class="tab">Product toevoegen</a></li>
+            <li {{#if addUser}}class="active"{{/if}} id="addUser">
+                <a href="javascript:void(0)" class="tab">Gebruiker toevoegen</a></li>
+        </ul>
+        {{#if loggedIn}}
+            Hallo, {{userName}}
+        {{else}}
+            <a href="#loginScreen" class="btn btn-primary" role="button" 
+                data-toggle="modal" data-target="#loginScreen" style="float: right">
+                Inloggen
+            </a>
+        {{/if}}
+    </div></div>
+</template>
+
+<template name="products">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                {{#each selectedProducts}}
+                    {{> selectedProduct}}
+                {{/each}}
+                    <li>Totaal: {{total}}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="span9" style="padding-left: 16px;">
+        {{#each products}}
+            {{> productGroup}}
+        {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="selectedProduct">
+    <li><a class="removeSelectedProduct" href="javascript:void(0);">
+        {{count}}&nbsp;&times;&nbsp;{{name}}
+    </a></li>
+</template>
+
+<template name="productGroup">
+    <div style="margin-bottom: 16px;">
+        <div class="row">
+        {{#each products}}
+            {{> product}}
+        {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="product">
+    <span class="span2">
+        <a href="javascript:void(0)" class="btn selectProduct" style="height: 80px;">
+            {{name}} ({{formattedPrice}}, per {{per}})
+            {{> dummy}}
+        </a>
+    </span>
+</template>
+
+<template name="addProductButton">
+    <input type="button" value="Voeg product toe" id="addProduct" />
+</template>
+
+<template name="addProductForm">
+    <h2>Voeg een product toe:</h2>
+    <table>
+        <tr>
+            <td>Naam: </td>
+            <td><input type="text" id="name" /></td>
+        </tr>
+        <tr>
+            <td>Prijs (in centen):</td>
+            <td><input type="text" id="price" /></td>
+        </tr>
+        <tr>
+            <td>Per (aantal):</td>
+            <td><input type="text" id="per" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><a href="javascript:void(0);" id="save" class="btn">Opslaan</a></td>
+        </tr>
+    </table>
+</template>
+
+<template name="addUserForm">
+    <h2>Voeg een gebruiker toe:</h2>
+    <table>
+        <tr>
+            <td>Code: </td>
+            <td><input type="text" id="code" /></td>
+        </tr>
+        <tr>
+            <td>Vrijwilliger: </td>
+            <td><input type="checkbox" id="volunteer" /></td>
+        </tr>
+        <tr id="passwordTr" style="display: none">
+            <td>Wachtwoord: </td>
+            <td><input type="password" id="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><a href="javascript:void(0);" id="save" class="btn">Opslaan</a></td>
+        </tr>
+    </table>
+</template>
+
+<template name="dummy">
+    <br />
+    <span style="visibility: hidden;">
+        asdf asdf asdf asdf asdf
+    </span>
+</template>
+
+<template name="loginScreen">
+    <div id="loginScreen" aria-hidden="true" role="dialog" class="modal hide fade in">
+        <div class="modal-header">
+            <h3>Scan pas of voer code in</h3>
+        </div>
+        <div class="modal-body">
+            <div class="clearfix">
+                <input id="code" placeholder="Code" size="30" type="text"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0);" class="btn" 
+                data-toggle="modal" data-target="#loginScreen">Annuleren</a>
+            <a href="javascript:void(0);" class="btn btn-primary">Inloggen</a>
+        </div>
+    </div>
+</template>
